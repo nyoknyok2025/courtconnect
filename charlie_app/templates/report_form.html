@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit a Report - CourtConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #f8f8ff;
+    }
+
+    .help-text {
+        color: rgba(248, 250, 252, 0.92);
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid rgba(167, 139, 250, 0.18);
+        border-radius: 14px;
+        font-size: 14px;
+        font-family: inherit;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f8f8ff;
+    }
+
+    select option {
+        color: #111111;
+        background: #ffffff;
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-section {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 24px;
+        border-radius: 18px;
+        margin-bottom: 22px;
+        border-left: 4px solid #8b5cf6;
+        border: 1px solid rgba(167, 139, 250, 0.14);
+    }
+    
+    .form-section h3 {
+        color: #e9d5ff;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    
+    .submit-btn {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+    }
+    
+    .help-text {
+        font-size: 12px;
+        color: rgba(237, 233, 254, 0.72);
+        margin-top: 3px;
+    }
+    
+    .error {
+        color: #fb7185;
+        font-size: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>📝 Submit a Corruption Report</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Report Details -->
+    <div class="form-section">
+        <h3>Report Details</h3>
+        
+        <div class="form-group">
+            <label for="id_title">Report Title *</label>
+            {{ form.title }}
+            {{ form.title.errors }}
+            <div class="help-text">Brief title for your report</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_description">Description *</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+            <div class="help-text">Provide detailed information about the corruption or issue</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_category">Category *</label>
+            {{ form.category }}
+            {{ form.category.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_severity">Severity Level *</label>
+            {{ form.severity }}
+            {{ form.severity.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_location">Location *</label>
+            {{ form.location }}
+            {{ form.location.errors }}
+            <div class="help-text">Where did the incident occur?</div>
+        </div>
+    </div>
+    
+    <!-- Department -->
+    <div class="form-section">
+        <h3>Related Department</h3>
+        
+        <div class="form-group">
+            <label for="id_related_department">Government Department/Authority</label>
+            <div class="help-text">Choose the relevant government department or authority for this report.</div>
+            {{ form.related_department }}
+            {{ form.related_department.errors }}
+            <div class="help-text">Select the department involved (optional)</div>
+        </div>
+    </div>
+    
+    <!-- Reporter Information -->
+    <div class="form-section">
+        <h3>Your Information</h3>
+        
+        <div class="form-group">
+            <label for="id_reporter_name">Your Name *</label>
+            {{ form.reporter_name }}
+            {{ form.reporter_name.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_reporter_email">Your Email *</label>
+            {{ form.reporter_email }}
+            {{ form.reporter_email.errors }}
+            <div class="help-text">We'll use this to contact you about your report</div>
+        </div>
+        
+        <div class="form-group checkbox-group">
+            <label for="id_is_anonymous">
+                {{ form.is_anonymous }}
+                Keep my identity anonymous
+            </label>
+            {{ form.is_anonymous.errors }}
+        </div>
+        <div class="help-text">Your name will not be visible in public reports</div>
+    </div>
+    
+    <!-- Evidence -->
+    <div class="form-section">
+        <h3>Evidence (Optional)</h3>
+        
+        <div class="form-group">
+            <label for="id_evidence_file">Upload Supporting Documents/Photos</label>
+            {{ form.evidence_file }}
+            {{ form.evidence_file.errors }}
+            <div class="help-text">PDF, images, or documents that support your report (max 10MB)</div>
+        </div>
+    </div>
+    
+    <button type="submit" class="submit-btn">✓ Submit Report</button>
+    <a href="{% url 'charlie_app:home' %}" style="margin-left: 10px; color: #666;">Cancel</a>
+</form>
+{% endblock %}

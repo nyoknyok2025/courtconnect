@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - CourtConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-card {
+        max-width: 420px;
+        margin: 42px auto;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(167, 139, 250, 0.2);
+        box-shadow: 0 28px 70px rgba(15, 8, 45, 0.28);
+        border-radius: 24px;
+        padding: 34px 32px;
+        backdrop-filter: blur(12px);
+    }
+    .login-card h2 {
+        margin-bottom: 18px;
+        color: #f8f8ff;
+    }
+    .login-card p {
+        color: rgba(237, 233, 254, 0.78);
+        margin-bottom: 24px;
+    }
+    .login-card label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: #e9d5ff;
+    }
+    .login-card input {
+        width: 100%;
+        padding: 14px 16px;
+        margin-bottom: 18px;
+        border: 1px solid rgba(167, 139, 250, 0.22);
+        border-radius: 16px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f8f8ff;
+    }
+    .login-card .btn {
+        width: 100%;
+        text-align: center;
+    }
+    .login-card a {
+        color: #c4b5fd;
+    }
+    .login-card a:hover {
+        color: #ffffff;
+    }
+    .errorlist {
+        color: #fda4af;
+        margin-bottom: 18px;
+        list-style: none;
+    }
+    .captcha-box {
+        margin: 14px 0 18px;
+        padding: 14px 16px;
+        border: 1px solid rgba(167, 139, 250, 0.24);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.06);
+    }
+    .captcha-box label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 0;
+        font-weight: 600;
+        color: #f8f8ff;
+    }
+    .captcha-box input {
+        width: auto;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-card">
+    <h2>Sign in to CourtConnect</h2>
+    <p>Please login to continue to your dashboard.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <ul class="errorlist">{% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
+
+        <label for="id_username">Username</label>
+        {{ form.username }}
+
+        <label for="id_password">Password</label>
+        {{ form.password }}
+
+        <div class="captcha-box">
+            {{ form.captcha_confirmed }}
+            <label for="id_captcha_confirmed">I'm not a robot</label>
+        </div>
+
+        <button class="btn" type="submit">Login</button>
+    </form>
+    <p style="margin-top: 18px; text-align: center; font-size: 14px; color: #555;">
+        Don't have an account? <a href="{% url 'charlie_app:register_redirect' %}">Create one here</a>.
+    </p>
+</div>
+{% endblock %}

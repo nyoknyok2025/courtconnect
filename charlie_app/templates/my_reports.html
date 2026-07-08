@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reports - CourtConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(167, 139, 250, 0.14);
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 18px;
+        border-left: 4px solid #8b5cf6;
+    }
+    
+    .report-card h3 {
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-right: 10px;
+        color: #f8f8ff;
+        background: rgba(167, 139, 250, 0.2);
+    }
+    
+    .badge-status {
+        background: rgba(192, 132, 252, 0.24);
+    }
+    
+    .badge-severity {
+        background: rgba(250, 204, 255, 0.18);
+        color: #fb7185;
+    }
+    
+    .badge-severity.critical {
+        background: rgba(254, 205, 211, 0.18);
+        color: #f87171;
+    }
+    
+    .report-meta {
+        color: rgba(237, 233, 254, 0.8);
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 18px;
+    }
+    
+    .view-btn {
+        color: #c4b5fd;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    
+    .view-btn:hover {
+        text-decoration: underline;
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>My Reports</h2>
+
+{% if reports %}
+    {% for report in reports %}
+        <div class="report-card">
+            <h3>
+                <a href="{% url 'charlie_app:report_detail' report.pk %}" class="view-btn">{{ report.title }}</a>
+            </h3>
+            
+            <div>
+                <span class="badge badge-status">{{ report.status.get_status_display }}</span>
+                <span class="badge badge-severity {% if report.severity == 'critical' %}critical{% endif %}">{{ report.get_severity_display }}</span>
+            </div>
+            
+            <div class="report-meta">
+                <strong>{{ report.get_category_display }}</strong> • 📍 {{ report.location }}
+            </div>
+            
+            <div class="report-meta">
+                submitted on {{ report.created_at|date:"M d, Y" }} • 💬 {{ report.comments.count }} comments
+            </div>
+            
+            <p>{{ report.description|truncatewords:30 }}</p>
+            
+            <a href="{% url 'charlie_app:report_detail' report.pk %}" class="view-btn">View Details →</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <p>You haven't submitted any reports yet.</p>
+        <p><a href="{% url 'charlie_app:report_create' %}" class="view-btn">Submit your first report →</a></p>
+    </div>
+{% endif %}
+{% endblock %}

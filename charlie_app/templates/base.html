@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CourtConnect - Report Corruption Anonymously{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #10002b;
+            --panel: rgba(79, 70, 229, 0.18);
+            --panel-strong: rgba(109, 40, 217, 0.36);
+            --text: #ede9fe;
+            --text-muted: rgba(237, 233, 254, 0.78);
+            --accent: #c084fc;
+            --accent-strong: #7c3aed;
+            --border: rgba(167, 139, 250, 0.22);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            background: radial-gradient(circle at top left, rgba(147, 51, 234, 0.24), transparent 28%),
+                        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.18), transparent 22%),
+                        linear-gradient(180deg, #10002b 0%, #14002d 40%, #0b0022 100%);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(147, 51, 234, 0.08), transparent 32%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body, .content, .section, .report-card, .card, .stat-card, .empty-state, table, th, td, p, li, label, span, strong, small {
+            color: var(--text);
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+        }
+
+        a {
+            color: #f8fafc;
+        }
+
+        header {
+            background: linear-gradient(135deg, #5b21b6 0%, #8b5cf6 55%, #a855f7 100%);
+            color: #f8fafc;
+            padding: 34px 0 26px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 18px 50px rgba(79, 70, 229, 0.25);
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.12), transparent 20%),
+                        radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.08), transparent 18%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: clamp(28px, 2.4vw, 38px);
+            margin-bottom: 10px;
+            letter-spacing: 0.04em;
+            text-shadow: 0 6px 20px rgba(0, 0, 0, 0.24);
+        }
+
+        header p {
+            color: rgba(248, 250, 252, 0.92);
+            font-size: 1rem;
+            max-width: 740px;
+            line-height: 1.7;
+        }
+
+        nav {
+            background: rgba(79, 70, 229, 0.16);
+            border: 1px solid rgba(167, 139, 250, 0.24);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(79, 70, 229, 0.18);
+            margin: -8px auto 34px;
+            padding: 14px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            padding: 0 12px;
+        }
+
+        nav li {
+            display: inline;
+        }
+
+        nav a {
+            color: rgba(237, 233, 254, 0.94);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: 999px;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .content {
+            background: rgba(11, 8, 38, 0.72);
+            border: 1px solid rgba(167, 139, 250, 0.18);
+            border-radius: 28px;
+            box-shadow: 0 24px 70px rgba(23, 8, 79, 0.28);
+            backdrop-filter: blur(10px);
+            padding: 36px;
+            margin-bottom: 40px;
+        }
+
+        .btn,
+        .btn-small,
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 24px;
+            cursor: pointer;
+            box-shadow: 0 16px 28px rgba(124, 58, 237, 0.22);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+            font-weight: 700;
+        }
+
+        .btn:hover,
+        .btn-small:hover,
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 20px 32px rgba(124, 58, 237, 0.32);
+        }
+
+        .section,
+        .login-card,
+        .register-card,
+        .report-preview,
+        .report-card,
+        .feature,
+        .report-row,
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(167, 139, 250, 0.14);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(15, 8, 45, 0.24);
+            padding: 26px;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section h3 {
+            color: #e9d5ff;
+            margin-bottom: 18px;
+            border-bottom: 1px solid rgba(167, 139, 250, 0.18);
+            padding-bottom: 12px;
+        }
+
+        .report-preview {
+            border-left: 3px solid #c4b5fd;
+        }
+
+        .report-preview h4,
+        .report-card h4 {
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .report-preview p,
+        .content p,
+        .content li,
+        .feature p,
+        .info-item p {
+            color: var(--text-muted);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 170px;
+            padding: 28px 24px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.92), rgba(124, 58, 237, 0.92));
+            border-radius: 22px;
+            box-shadow: 0 20px 50px rgba(79, 70, 229, 0.24);
+            animation: float 8s ease-in-out infinite alternate;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 16%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08), transparent 12%);
+            pointer-events: none;
+        }
+
+        .stat-card h3 {
+            font-size: 3.4rem;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-card p {
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .dashboard-grid .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.95), rgba(79, 70, 229, 0.95));
+        }
+
+        .dashboard-grid .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.92), rgba(110, 231, 255, 0.12));
+            color: #ffffff;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #f8f8ff;
+            background: rgba(167, 139, 250, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .badge-status {
+            background: rgba(192, 132, 252, 0.24);
+            color: #ede9fe;
+        }
+
+        .badge-severity {
+            background: rgba(250, 204, 255, 0.18);
+            color: #fb7185;
+        }
+
+        .badge-category {
+            background: rgba(129, 140, 248, 0.24);
+            color: #eef2ff;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(167, 139, 250, 0.18);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f8f8ff;
+            outline: none;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: rgba(167, 139, 250, 0.38);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #e9d5ff;
+        }
+
+        .errorlist {
+            color: #fda4af;
+            list-style: none;
+            margin-bottom: 18px;
+        }
+
+        .errorlist li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px 0;
+            color: rgba(229, 231, 255, 0.78);
+            margin-top: 20px;
+            border-top: 1px solid rgba(167, 139, 250, 0.14);
+            background: rgba(12, 6, 42, 0.65);
+        }
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-8px); }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🛡️ CourtConnect</h1>
+            <p>Report Corruption & Governance Issues Anonymously</p>
+        </div>
+    </header>
+    
+    {% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' %}
+    <nav>
+        <div class="container">
+            <ul>
+                           {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'charlie_app:admin_dashboard' %}">📊 Admin Dashboard</a></li>
+                        <li><a href="{% url 'admin_report_list' %}">📋 View Reports</a></li>
+                    {% else %}
+                        <li><a href="{% url 'charlie_app:user_dashboard' %}">👤 User Dashboard</a></li>
+                        <li><a href="{% url 'charlie_app:report_create' %}">📝 Submit Report</a></li>
+                        <li><a href="{% url 'charlie_app:my_reports' %}">📌 My Reports</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'charlie_app:logout' %}">Logout ({{ user.username }})</a></li>
+                {% else %}
+                    <li><a href="{% url 'charlie_app:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        <p>&copy; 2026 CourtConnect. Promoting transparency and accountability in governance.</p>
+    </footer>
+</body>
+</html>

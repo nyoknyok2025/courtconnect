@@ -1,0 +1,42 @@
+[
+  {
+    "text": "a government officer demanded money to process a permit",
+    "label": "bribery"
+  },
+  {
+    "text": "the clinic had a broken ambulance and dirty waiting room",
+    "label": "unsafe_service"
+  },
+  {
+    "text": "the public office delayed my certificate without explanation",
+    "label": "governance"
+  },
+  {
+    "text": "a staff member insulted citizens at the tax station",
+    "label": "misconduct"
+  },
+  {
+    "text": "the school lacked proper safety equipment and lighting",
+    "label": "unsafe_service"
+  },
+  {
+    "text": "someone offered a payment to skip an inspection",
+    "label": "corruption"
+  },
+  {
+    "text": "a civil servant ignored my complaint for months",
+    "label": "governance"
+  },
+  {
+    "text": "an official used public funds for personal expenses",
+    "label": "corruption"
+  },
+  {
+    "text": "the hospital refused urgent treatment because of paperwork",
+    "label": "unsafe_service"
+  },
+  {
+    "text": "a police officer behaved unprofessionally during an arrest",
+    "label": "misconduct"
+  }
+]
