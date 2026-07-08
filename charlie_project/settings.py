@@ -26,7 +26,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-0wr4conirwg%nq3_$mhpur4xxa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
-ALLOWED_HOSTS = ['*', '.onrender.com']
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '*.onrender.com').split(',') if host.strip()]
+
+if os.getenv('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
 
 
 
