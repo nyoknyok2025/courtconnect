@@ -21,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0wr4conirwg%nq3_$mhpur4xxap=*l3$!&ur-x*+aaiyxu&+0%'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-0wr4conirwg%nq3_$mhpur4xxap=*l3$!&ur-x*+aaiyxu&+0%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = ['*', '.onrender.com']
+
 
 
 # Application definition
@@ -142,6 +143,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # Store uploaded media in the user's temp folder to avoid permission issues during development
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.getenv('TEMP') or str(BASE_DIR), 'charlie_media')
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(os.getenv('TEMP') or str(BASE_DIR), 'charlie_media'))
 # Use email-based redirects after registration if needed
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
