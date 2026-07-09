@@ -15,6 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,13 +25,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-0wr4conirwg%nq3_$mhpur4xxap=*l3$!&ur-x*+aaiyxu&+0%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
+DEBUG = os.getenv('DEBUG', 'False').lower() in {'1', 'true', 'yes', 'on'}
 
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '*.onrender.com').split(',') if host.strip()]
+allowed_hosts = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,testserver,.onrender.com,.pythonanywhere.com,<yourusername>.pythonanywhere.com')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
 
-if os.getenv('RENDER_EXTERNAL_HOSTNAME'):
-    ALLOWED_HOSTS.append(os.getenv('RENDER_EXTERNAL_HOSTNAME'))
+render_host = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if render_host:
+    ALLOWED_HOSTS.append(render_host)
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    f'https://{host}' for host in ALLOWED_HOSTS
+    if host and host not in {'localhost', '127.0.0.1', 'testserver'}
+]
 
 
 # Application definition
@@ -86,15 +94,7 @@ WSGI_APPLICATION = 'charlie_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# Use the project-local sqlite database when writable, otherwise fall back
-# to a user-writable temporary sqlite database for development.
 DATABASE_FILE = BASE_DIR / 'db.sqlite3'
-try:
-    DATABASE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(DATABASE_FILE, 'a+b'):
-        pass
-except OSError:
-    DATABASE_FILE = Path(os.getenv('TEMP') or BASE_DIR) / 'charlie_db_temp.sqlite3'
 
 DATABASES = {
     'default': {
@@ -139,13 +139,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-# Store uploaded media in the user's temp folder to avoid permission issues during development
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(os.getenv('TEMP') or str(BASE_DIR), 'charlie_media'))
+MEDIA_ROOT = BASE_DIR / 'media'
 # Use email-based redirects after registration if needed
 # EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
